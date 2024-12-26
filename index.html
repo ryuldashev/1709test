@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Bot Interface</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Простой интерфейс для Телеграм-бота</h1>
+        <p>Нажмите кнопку, чтобы отправить команду боту:</p>
+        <textarea id="textMessage"></textarea>
+        <button class="send-message" onclick="sendMessage()">Отправить сообщение</button>
+        <p id="response"></p>
+    </div>
+
+    <script>
+        const token = '7785038610:AAH9HVL2qBJuCEJG6fJKdmD2K3yY77VWT_Q'; // Вставьте сюда токен вашего бота 
+        const chat_id = '82493329';  // Вставьте сюда ID чата (можно получить через @userinfobot)
+
+        function sendMessage() {
+            const message = document.getElementById('textMessage').value;
+            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${message}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('response').innerText = 'Сообщение отправлено!';
+                })
+                .catch(error => {
+                    document.getElementById('response').innerText = 'Ошибка при отправке сообщения.';
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
