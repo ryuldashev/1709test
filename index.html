@@ -20,8 +20,23 @@
 
         async function sendWeather() {
             try {
-                // Получаем данные о погоде
-                const weatherResponse = await fetch('https://wttr.in/tashkent?format=j1');
+                // Используем CORS-прокси
+                const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+                const weatherUrl = 'https://wttr.in/tashkent?format=j1';
+                
+                document.getElementById('response').innerText = 'Получаем данные о погоде...';
+
+                const weatherResponse = await fetch(corsProxy + weatherUrl, {
+                    headers: {
+                        'Origin': 'null',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (!weatherResponse.ok) {
+                    throw new Error(`HTTP error! status: ${weatherResponse.status}`);
+                }
+                
                 const weatherData = await weatherResponse.json();
                 
                 // Формируем сообщение о погоде
@@ -31,25 +46,8 @@
 ☁️ ${current.lang_ru[0].value}
 💧 Влажность: ${current.humidity}%
 💨 Ветер: ${current.windspeedKmph} км/ч
-👀 Видимость: ${current.visibility} км`;
+👀 Видимость: ${current.visibility} км
+🕒 Обновлено: ${current.observation_time}`;
 
                 // Отправляем сообщение в Telegram
-                const encodedMessage = encodeURIComponent(weatherMessage);
-                const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodedMessage}`;
-                
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (data.ok) {
-                    document.getElementById('response').innerText = 'Информация о погоде отправлена в Telegram!';
-                } else {
-                    throw new Error('Ошибка при отправке в Telegram');
-                }
-            } catch (error) {
-                document.getElementById('response').innerText = 'Ошибка при получении или отправке погоды.';
-                console.error('Error:', error);
-            }
-        }
-    </script>
-</body>
-</html>
+                const encode
