@@ -9,29 +9,46 @@
 <body>
     <div class="container">
         <h1>Простой интерфейс для Телеграм-бота</h1>
-        <p>Нажмите кнопку, чтобы отправить команду боту:</p>
-        <textarea id="textMessage"></textarea>
-        <button class="send-message" onclick="sendMessage()">Отправить сообщение</button>
+        <p>Нажмите кнопку, чтобы получить погоду в Ташкенте:</p>
+        <button class="send-message" onclick="sendWeather()">Получить погоду</button>
         <p id="response"></p>
     </div>
 
     <script>
-        const token = '7785038610:AAH9HVL2qBJuCEJG6fJKdmD2K3yY77VWT_Q'; // Вставьте сюда токен вашего бота 
-        const chat_id = '82493329';  // Вставьте сюда ID чата (можно получить через @userinfobot)
+        const token = '7785038610:AAH9HVL2qBJuCEJG6fJKdmD2K3yY77VWT_Q';
+        const chat_id = '82493329';
 
-        function sendMessage() {
-            const message = document.getElementById('textMessage').value;
-            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${message}`;
-            
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('response').innerText = 'Сообщение отправлено!';
-                })
-                .catch(error => {
-                    document.getElementById('response').innerText = 'Ошибка при отправке сообщения.';
-                    console.error('Error:', error);
-                });
+        async function sendWeather() {
+            try {
+                // Получаем данные о погоде
+                const weatherResponse = await fetch('https://wttr.in/tashkent?format=j1');
+                const weatherData = await weatherResponse.json();
+                
+                // Формируем сообщение о погоде
+                const current = weatherData.current_condition[0];
+                const weatherMessage = `🌍 Погода в Ташкенте:
+🌡 Температура: ${current.temp_C}°C
+☁️ ${current.lang_ru[0].value}
+💧 Влажность: ${current.humidity}%
+💨 Ветер: ${current.windspeedKmph} км/ч
+👀 Видимость: ${current.visibility} км`;
+
+                // Отправляем сообщение в Telegram
+                const encodedMessage = encodeURIComponent(weatherMessage);
+                const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodedMessage}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.ok) {
+                    document.getElementById('response').innerText = 'Информация о погоде отправлена в Telegram!';
+                } else {
+                    throw new Error('Ошибка при отправке в Telegram');
+                }
+            } catch (error) {
+                document.getElementById('response').innerText = 'Ошибка при получении или отправке погоды.';
+                console.error('Error:', error);
+            }
         }
     </script>
 </body>
