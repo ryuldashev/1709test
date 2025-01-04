@@ -50,4 +50,23 @@
 🕒 Обновлено: ${current.observation_time}`;
 
                 // Отправляем сообщение в Telegram
-                const encode
+                const encodedMessage = encodeURIComponent(weatherMessage);
+                const telegramUrl = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodedMessage}`;
+                
+                const telegramResponse = await fetch(telegramUrl);
+                const telegramData = await telegramResponse.json();
+
+                if (telegramData.ok) {
+                    document.getElementById('response').innerText = 'Информация о погоде отправлена в Telegram!';
+                } else {
+                    throw new Error('Ошибка при отправке в Telegram');
+                }
+            } catch (error) {
+                document.getElementById('response').innerText = 
+                    `Ошибка: ${error.message}. Попробуйте позже или проверьте консоль для деталей.`;
+                console.error('Detailed error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
