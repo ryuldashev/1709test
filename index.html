@@ -77,11 +77,27 @@
     <h2 id="success">🚀 Поздравляем!</h2>
     <p>Вы прошли все уровни. Вот ваш флаг:</p>
     <code id="finalFlag">[расшифровка...]</code>
+    
+    <button onclick="goLevel4()">секретный уровень для продвинутых</button>
   </div>
 
+
+
+  <!-- Уровень 4: подсказки нет -->
+  <div class="level" id="level4">
+    <h2>Уровень 4 секретный</h2>
+    <p>расшифруй код</p>
+    <input type="text" id="input4">
+    <button onclick="checkLevel4()">Проверка</button>
+    <div id="error4" style="color: red;"></div>
+  </div>
+
+
+
   <script>
-    const finalFlag = "bWF0cml4LS00Mg=="; // flag{you_cracked_it}
+    const finalFlag = "bWF0cml4LS00Mg=="; // flag 
     const secretPassword3 = "finalBoss";
+    const secretPassword4 = "aGV5NDI="; 
   
 
     function showLevel(id) {
@@ -115,6 +131,19 @@
         document.getElementById("finalFlag").textContent = atob(finalFlag);
       } else {
         document.getElementById("error3").textContent = "Неверно!";
+      }
+    }
+
+    function goLevel4() {
+      showLevel("level4");
+    }
+
+    function checkLevel4() {
+      const input = document.getElementById("input4").value;
+      if (input === atob(secretPassword4)) {
+        alert("ты взломал уровень повышенной сложности");
+      } else {
+        document.getElementById("error4").textContent = "Неверно!";
       }
     }
 
