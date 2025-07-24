@@ -76,11 +76,13 @@
   <div class="level" id="final">
     <h2 id="success">🚀 Поздравляем!</h2>
     <p>Вы прошли все уровни. Вот ваш флаг:</p>
-    <code>flag{you_cracked_it}</code>
+    <code id="finalFlag">[расшифровка...]</code>
   </div>
 
   <script>
+    const finalFlag = "bWF0cml4LS00Mg=="; // flag{you_cracked_it}
     const secretPassword3 = "finalBoss";
+  
 
     function showLevel(id) {
       document.querySelectorAll('.level').forEach(lvl => lvl.style.display = 'none');
@@ -110,6 +112,7 @@
       const input = document.getElementById("input3").value;
       if (input === secretPassword3) {
         showLevel("final");
+        document.getElementById("finalFlag").textContent = atob(finalFlag);
       } else {
         document.getElementById("error3").textContent = "Неверно!";
       }
