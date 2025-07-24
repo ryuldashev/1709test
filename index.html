@@ -1,72 +1,122 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Bot Interface</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Взломай Mars IT</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .level {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      border: 1px solid #444;
+      padding: 30px;
+      border-radius: 10px;
+      background: #161b22;
+    }
+    input {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      width: 200px;
+    }
+    button {
+      padding: 10px;
+      background: #238636;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #success {
+      font-size: 24px;
+      color: #39d353;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Простой интерфейс для Телеграм-бота</h1>
-        <p>Нажмите кнопку, чтобы получить погоду в Ташкенте:</p>
-        <button class="send-message" onclick="sendWeather()">Получить погоду</button>
-        <p id="response"></p>
-    </div>
+  <!-- Уровень 1: подсказка в HTML -->
+  <!-- Подсказка: пароль — mars123 -->
+  <div class="level" id="level1">
+    <h2>Уровень 1</h2>
+    <p>Введите пароль, чтобы продолжить:</p>
+    <input type="text" id="input1">
+    <button onclick="checkLevel1()">Войти</button>
+    <div id="error1" style="color: red;"></div>
+  </div>
 
-    <script>
-        const token = '7785038610:AAH9HVL2qBJuCEJG6fJKdmD2K3yY77VWT_Q';
-        const chat_id = '82493329';
+  <!-- Уровень 2: подсказка в консоли -->
+  <div class="level" id="level2">
+    <h2>Уровень 2</h2>
+    <p>Введите пароль:</p>
+    <input type="text" id="input2">
+    <button onclick="checkLevel2()">Дальше</button>
+    <div id="error2" style="color: red;"></div>
+  </div>
 
-        async function sendWeather() {
-            try {
-                // Используем CORS-прокси
-                const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-                const weatherUrl = 'https://wttr.in/tashkent?format=j1';
-                
-                document.getElementById('response').innerText = 'Получаем данные о погоде...';
+  <!-- Уровень 3: подсказка в JS -->
+  <div class="level" id="level3">
+    <h2>Уровень 3</h2>
+    <p>Последний шаг. Где-то в коде сайта спрятан ответ...</p>
+    <input type="text" id="input3">
+    <button onclick="checkLevel3()">Финиш</button>
+    <div id="error3" style="color: red;"></div>
+  </div>
 
-                const weatherResponse = await fetch(corsProxy + weatherUrl, {
-                    headers: {
-                        'Origin': 'null',
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                if (!weatherResponse.ok) {
-                    throw new Error(`HTTP error! status: ${weatherResponse.status}`);
-                }
-                
-                const weatherData = await weatherResponse.json();
-                
-                // Формируем сообщение о погоде
-                const current = weatherData.current_condition[0];
-                const weatherMessage = `🌍 Погода в Ташкенте:
-🌡 Температура: ${current.temp_C}°C
-☁️ ${current.lang_ru[0].value}
-💧 Влажность: ${current.humidity}%
-💨 Ветер: ${current.windspeedKmph} км/ч
-👀 Видимость: ${current.visibility} км
-🕒 Обновлено: ${current.observation_time}`;
+  <!-- Финиш -->
+  <div class="level" id="final">
+    <h2 id="success">🚀 Поздравляем!</h2>
+    <p>Вы прошли все уровни. Вот ваш флаг:</p>
+    <code>flag{you_cracked_it}</code>
+  </div>
 
-                // Отправляем сообщение в Telegram
-                const encodedMessage = encodeURIComponent(weatherMessage);
-                const telegramUrl = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodedMessage}`;
-                
-                const telegramResponse = await fetch(telegramUrl);
-                const telegramData = await telegramResponse.json();
+  <script>
+    const secretPassword3 = "finalBoss";
 
-                if (telegramData.ok) {
-                    document.getElementById('response').innerText = 'Информация о погоде отправлена в Telegram!';
-                } else {
-                    throw new Error('Ошибка при отправке в Telegram');
-                }
-            } catch (error) {
-                document.getElementById('response').innerText = 
-                    `Ошибка: ${error.message}. Попробуйте позже или проверьте консоль для деталей.`;
-                console.error('Detailed error:', error);
-            }
-        }
-    </script>
+    function showLevel(id) {
+      document.querySelectorAll('.level').forEach(lvl => lvl.style.display = 'none');
+      document.getElementById(id).style.display = 'flex';
+    }
+
+    function checkLevel1() {
+      const input = document.getElementById("input1").value;
+      if (input === "mars123") {
+        showLevel("level2");
+        console.log("Псс... пароль к следующему уровню: devtoolsRulez");
+      } else {
+        document.getElementById("error1").textContent = "Неверно!";
+      }
+    }
+
+    function checkLevel2() {
+      const input = document.getElementById("input2").value;
+      if (input === "devtoolsRulez") {
+        showLevel("level3");
+      } else {
+        document.getElementById("error2").textContent = "Неверно!";
+      }
+    }
+
+    function checkLevel3() {
+      const input = document.getElementById("input3").value;
+      if (input === secretPassword3) {
+        showLevel("final");
+      } else {
+        document.getElementById("error3").textContent = "Неверно!";
+      }
+    }
+
+    // стартуем с 1 уровня
+    showLevel("level1");
+  </script>
 </body>
 </html>
