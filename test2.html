@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Hacking Quest</title>
+  <style>
+    body {
+      font-family: monospace;
+      background-color: #111;
+      color: #0f0;
+      padding: 30px;
+    }
+    .level {
+      display: none;
+      margin-bottom: 30px;
+    }
+    input, button {
+      font-family: monospace;
+      padding: 8px;
+      margin-top: 10px;
+      background-color: #222;
+      color: #0f0;
+      border: 1px solid #0f0;
+    }
+  </style>
+</head>
+<body>
+  <h1>🚨 JS Hacking Quest</h1>
+  <div id="level2" class="level">
+    <p>Ты прошёл первый уровень... Что дальше?</p>
+    <p>В консоли спрятана подсказка 🕵️‍♂️</p>
+    <input id="level2input" placeholder="Введи ключ">
+    <button onclick="checkLevel2()">Проверить</button>
+  </div>
+
+  <div id="level3" class="level">
+    <p>Кнопка сломалась... Можешь сам запустить <code>winGame()</code>?</p>
+    <button disabled>winGame()</button>
+  </div>
+
+  <div id="level4" class="level">
+    <p>Почини поле и введи <code>admin</code></p>
+    <input id="login" readonly value="">
+    <button onclick="checkLogin()">Проверить</button>
+  </div>
+
+  <div id="final" class="level">
+    <h2>🎉 Поздравляем, ты прошёл весь квест!</h2>
+    <p>Твоя награда: <code>console.log("Ты крут")</code></p>
+  </div>
+
+  <script>
+    // Старт сразу со второго уровня
+    document.getElementById("level2").style.display = "block";
+    console.log("Следующий ключ: bGV2ZWwy"); // base64 'level2'
+
+    function checkLevel2() {
+      const val = document.getElementById("level2input").value.trim();
+      if (val === "level2") {
+        document.getElementById("level2").style.display = "none";
+        document.getElementById("level3").style.display = "block";
+      } else {
+        alert("Неверно");
+      }
+    }
+
+    function winGame() {
+      document.getElementById("level3").style.display = "none";
+      document.getElementById("level4").style.display = "block";
+    }
+
+    function checkLogin() {
+      const login = document.getElementById("login").value;
+      if (login === "admin") {
+        document.getElementById("level4").style.display = "none";
+        document.getElementById("final").style.display = "block";
+        console.log("Ты крут");
+      } else {
+        alert("Неверно");
+      }
+    }
+  </script>
+</body>
+</html>
